@@ -7,9 +7,11 @@ namespace ScapeInternal
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static IntPtr create(string s);
-
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void destroy(IntPtr p);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static void setMaterial(IntPtr obj, IntPtr mat);
     }
 }
 
@@ -25,6 +27,11 @@ namespace Scape
         ~StaticObject()
         {
             ScapeInternal.StaticObject.destroy(objectPtr);
+        }
+
+        public void SetMaterial(Material mat)
+        {
+            ScapeInternal.StaticObject.setMaterial(objectPtr, mat.objectPtr);
         }
     }
 }
