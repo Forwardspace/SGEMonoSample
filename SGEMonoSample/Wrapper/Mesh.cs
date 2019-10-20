@@ -4,7 +4,13 @@ using System.Runtime.CompilerServices;
 
 namespace ScapeInternal
 {
-    class Mesh
+    static class MeshInVBOs
+    {
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        extern public static void destroy(IntPtr mesh);
+    }
+
+    static class Mesh
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         extern public static IntPtr create(string filename);
@@ -15,6 +21,21 @@ namespace ScapeInternal
 
 namespace Scape
 {
+    class MeshInVBOs
+    {
+        public MeshInVBOs(IntPtr meshPtr)
+        {
+            objectPtr = meshPtr;
+        }
+
+        ~MeshInVBOs()
+        {
+            ScapeInternal.MeshInVBOs.destroy(objectPtr);
+        }
+
+        public IntPtr objectPtr { get; private set; } = IntPtr.Zero;
+    }
+
     class Mesh
     {
         public Mesh(string filename)
@@ -27,6 +48,6 @@ namespace Scape
             ScapeInternal.Mesh.destroy(objectPtr);
         }
 
-        private IntPtr objectPtr = IntPtr.Zero;
+        public IntPtr objectPtr { get; private set; } = IntPtr.Zero;
     }
 }

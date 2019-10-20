@@ -8,10 +8,19 @@ namespace ScapeInternal
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static IntPtr create(string s);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static IntPtr createFromMesh(IntPtr m);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void destroy(IntPtr p);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static IntPtr getMaterial(IntPtr obj);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void setMaterial(IntPtr obj, IntPtr mat);
+
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static IntPtr getMeshInVBOs(IntPtr obj);
     }
 }
 
@@ -24,14 +33,34 @@ namespace Scape
             objectPtr = ScapeInternal.StaticObject.create(filename);
         }
 
+        public StaticObject(Mesh mesh)
+        {
+            objectPtr = ScapeInternal.StaticObject.createFromMesh(mesh.objectPtr);
+        }
+
         ~StaticObject()
         {
             ScapeInternal.StaticObject.destroy(objectPtr);
         }
 
-        public void SetMaterial(Material mat)
+        public Material ObjectMat
         {
-            ScapeInternal.StaticObject.setMaterial(objectPtr, mat.objectPtr);
+            get
+            {
+                return new Material(ScapeInternal.StaticObject.getMaterial(objectPtr));
+            }
+            set
+            {
+                ScapeInternal.StaticObject.setMaterial(objectPtr, value.objectPtr);
+            }
+        }
+
+        public MeshInVBOs ObjectMesh {
+            get
+            {
+                return new MeshInVBOs(ScapeInternal.StaticObject.getMeshInVBOs(objectPtr));
+            }
+            private set { }
         }
     }
 }

@@ -22,5 +22,6 @@ class MainInternal
     public static void postFrame()
     {
         Game.postFrame();
+        Scape.UserInputManager.UpdateInputs();
     }
 }

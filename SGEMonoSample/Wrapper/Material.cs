@@ -50,6 +50,11 @@ namespace Scape
             objectPtr = ScapeInternal.Material.createEmpty();
         }
 
+        public Material(IntPtr mat)
+        {
+            objectPtr = mat;
+        }
+
         public Material(Dictionary<Type, Texture> textures)
         {
             //Get the objectPtrs from Texture objects to pass to C++ directly

@@ -15,7 +15,7 @@ namespace Scape
 {
     class UserInputMapping
     {
-        public UserInputMapping(Dictionary<string, float> axes, Dictionary<int, Dictionary<string, float>> weights)
+        public UserInputMapping(Dictionary<string, float> axes, Dictionary<Keys, Dictionary<string, float>> weights)
         {
             AxesCurrentValues = AxesDefault = axes;
             KeysPerAxisValues = weights;
@@ -27,9 +27,9 @@ namespace Scape
             //weights and applying them to AxesCurrentValues
             AxesCurrentValues = AxesDefault;
 
-            foreach (KeyValuePair<int, Dictionary<string, float>> keyWeights in KeysPerAxisValues)
+            foreach (KeyValuePair<Keys, Dictionary<string, float>> keyWeights in KeysPerAxisValues)
             {
-                if (ScapeInternal.InputManager.isPressed(keyWeights.Key))
+                if (ScapeInternal.InputManager.isPressed((int)keyWeights.Key))
                 {
                     foreach (KeyValuePair<string, float> weight in keyWeights.Value)
                     {
@@ -42,7 +42,7 @@ namespace Scape
 
         private Dictionary<string, float> AxesDefault;
         public Dictionary<string, float> AxesCurrentValues { get; private set; }
-        private Dictionary<int, Dictionary<string, float>> KeysPerAxisValues;
+        private Dictionary<Keys, Dictionary<string, float>> KeysPerAxisValues;
     }
 
     static class UserInputManager
@@ -52,15 +52,15 @@ namespace Scape
             //Setup basic WASD controls
             var initialAxes = new Dictionary<string, float> {
                 { "X", 0 },
-                { "Y", 0 }
+                { "Z", 0 }
             };
 
-            var weights = new Dictionary<int, Dictionary<string, float>>()
+            var weights = new Dictionary<Keys, Dictionary<string, float>>()
             {
-                { 'a', new Dictionary<string, float> { { "X", -1f } } },
-                { 'd', new Dictionary<string, float> { { "X", 1f } } },
-                { 'w', new Dictionary<string, float> { { "Z", -1f } } },
-                { 's', new Dictionary<string, float> { { "Z", 1f } } },
+                { Keys.KEY_D, new Dictionary<string, float> { { "X", -1f } } },
+                { Keys.KEY_A, new Dictionary<string, float> { { "X", 1f } } },
+                { Keys.KEY_W, new Dictionary<string, float> { { "Z", -1f } } },
+                { Keys.KEY_S, new Dictionary<string, float> { { "Z", 1f } } },
             };
 
             mapping = new UserInputMapping(initialAxes, weights);
@@ -81,9 +81,9 @@ namespace Scape
             return mapping.AxesCurrentValues[axis];
         }
 
-        public static bool IsPressed(int key)
+        public static bool IsPressed(Scape.Keys key)
         {
-            return ScapeInternal.InputManager.isPressed(key);
+            return ScapeInternal.InputManager.isPressed((int)key);
         }
 
         private static UserInputMapping mapping;

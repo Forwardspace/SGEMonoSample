@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 static class Game
 {
-    static Scape.ScriptedObject palletObject;
-    static Scape.ScriptedObject centralPallet;
+    static Scape.ScriptedObject instancedPallet;
 
     public static void startup()
     {
@@ -12,10 +11,7 @@ static class Game
 
         ScriptedPallet.InitMaterials();
 
-        palletObject = new ScriptedPallet();
-        palletObject.SetPos(0.5f, 0, 0);
-
-        centralPallet = new ScriptedPallet();
+        instancedPallet = new ScriptedPallet();
     }
 
     public static void cleanup()
@@ -26,6 +22,10 @@ static class Game
 
     public static void preFrame()
     {
+        if (Scape.UserInputManager.IsPressed(Scape.Keys.KEY_W))
+        {
+            System.Console.WriteLine("W pressed");
+        }
     }
 
     public static void postFrame()
@@ -35,7 +35,7 @@ static class Game
 
 class ScriptedPallet : Scape.ScriptedObject
 {
-    Scape.StaticObject pallet;
+    Scape.InstancedStaticObject pallet;
     float palletYrot = 0;
 
     public static void InitMaterials()
@@ -47,15 +47,25 @@ class ScriptedPallet : Scape.ScriptedObject
 
     public override void startup()
     {
-        pallet = new Scape.StaticObject("models/pallet.obj");
+        float xPos = 0;
+        float yPos = 0;
+
+        pallet = new Scape.InstancedStaticObject("models/pallet.obj", 2, (Scape.StaticObjectInstance inst) => {
+            inst.SetPos(xPos, yPos, 0);
+            xPos += 0.5f;
+            yPos += 0.2f;
+        });
         AddChild(pallet);
 
-        pallet.SetMaterial(Scape.Material.Get("wood"));
+        pallet.ObjectMat = Scape.Material.Get("wood");
     }
 
     public override void update()
     {
-        pallet.SetRot(0, palletYrot, 0);
-        palletYrot += 0.01f;
+        pallet.TransformInstances((Scape.StaticObjectInstance inst) => {
+            inst.SetRot(0, palletYrot, 0);
+        });
+
+        palletYrot += 0.05f;
     }
 }
