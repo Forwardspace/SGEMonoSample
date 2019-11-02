@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -30,19 +31,19 @@ namespace ScapeInternal
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static IntPtr getMeshInVBOs(IntPtr obj);
+
+        //
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static void setInstanceRigidBodyFromMass(IntPtr obj, float mass);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static void setInstanceRigidBodyFromDetails(IntPtr obj, float mass, int type, float x, float y, float z);
+
     }
 
     static class StaticObjectInstance
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         extern public static void destroy(IntPtr obj);
-
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //extern public static void setPos(IntPtr obj, float x, float y, float z);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //extern public static void setRot(IntPtr obj, float x, float y, float z);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //extern public static void setScl(IntPtr obj, float x, float y, float z);
     }
 }
 
@@ -142,6 +143,16 @@ namespace Scape
         ~StaticObjectInstance()
         {
             ScapeInternal.StaticObjectInstance.destroy(objectPtr);
+        }
+
+        public void SetRigidBody(float mass)
+        {
+            ScapeInternal.InstancedStaticObject.setInstanceRigidBodyFromMass(objectPtr, mass);
+        }
+
+        public void SetRigidBody(float mass, RigidBodyType type, Vector3 dims)
+        {
+            ScapeInternal.InstancedStaticObject.setInstanceRigidBodyFromDetails(objectPtr, mass, (int)type, dims.X, dims.Y, dims.Z);
         }
     }
 }

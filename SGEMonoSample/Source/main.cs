@@ -48,13 +48,15 @@ class ScriptedPallet : Scape.ScriptedObject
     public override void startup()
     {
         float xPos = 0;
-        float yPos = 0;
+        float yPos = -5;
 
         pallet = new Scape.InstancedStaticObject("models/pallet.obj", 2, (Scape.StaticObjectInstance inst) => {
-            inst.SetPos(xPos, yPos, 0);
+            inst.SetPos(xPos, yPos, -1);
             xPos += 0.5f;
             yPos += 0.2f;
-        });
+
+            inst.SetRigidBody(0);
+        }, true);
         AddChild(pallet);
 
         pallet.ObjectMat = Scape.Material.Get("wood");
