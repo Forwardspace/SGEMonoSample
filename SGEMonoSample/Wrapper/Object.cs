@@ -69,11 +69,11 @@ namespace Scape
 
         public virtual void SetScl(float x, float y, float z)
         {
-            ScapeInternal.Object.setPos(objectPtr, x, y, z);
+            ScapeInternal.Object.setScl(objectPtr, x, y, z);
         }
-        public virtual void SetScl(Vector3 rot)
+        public virtual void SetScl(Vector3 scl)
         {
-            ScapeInternal.Object.setRot(objectPtr, rot.X, rot.Y, rot.Z);
+            ScapeInternal.Object.setScl(objectPtr, scl.X, scl.Y, scl.Z);
         }
 
         public Vector3 Scl()

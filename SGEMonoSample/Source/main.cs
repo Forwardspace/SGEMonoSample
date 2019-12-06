@@ -7,7 +7,7 @@ static class Game
 
     public static void startup()
     {
-        Scape.Renderer.init(1024, 768, "Hello Mono World!", false);
+        Scape.Renderer.init(1920, 1080, "Hello Mono World!", false);
 
         ScriptedPallet.InitMaterials();
 
@@ -48,14 +48,19 @@ class ScriptedPallet : Scape.ScriptedObject
     public override void startup()
     {
         float xPos = 0;
-        float yPos = -5;
+        float yPos = -50;
 
-        pallet = new Scape.InstancedStaticObject("models/pallet.obj", 2, (Scape.StaticObjectInstance inst) => {
-            inst.SetPos(xPos, yPos, -1);
+        bool hasMass = false;
+
+        pallet = new Scape.InstancedStaticObject("models/pallet.obj", 20, (Scape.StaticObjectInstance inst) => {
+            inst.SetPos(xPos, yPos, 0);
             xPos += 0.5f;
-            yPos += 0.2f;
+            yPos -= 10f;
+
+            inst.SetScl(50, 50, 50);
 
             inst.SetRigidBody(0);
+            hasMass = !hasMass;
         }, true);
         AddChild(pallet);
 
@@ -68,6 +73,6 @@ class ScriptedPallet : Scape.ScriptedObject
             inst.SetRot(0, palletYrot, 0);
         });
 
-        palletYrot += 0.05f;
+        //palletYrot += 0.05f;
     }
 }

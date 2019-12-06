@@ -108,7 +108,6 @@ namespace Scape
             }
         }
 
-
         public Material ObjectMat
         {
             get
